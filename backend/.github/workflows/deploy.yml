@@ -27,7 +27,7 @@ jobs:
               git clone https://github.com/deepakramaswamy2006/MERN_BACKEND.git
             fi
 
-            cd backend-sece-Aiml || exit 1
+            cd MERN_BACKEND || exit 1
             git pull origin main
 
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
