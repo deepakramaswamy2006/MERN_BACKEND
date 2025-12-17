@@ -21,19 +21,26 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu || exit 1
+            set -e
+
+            cd /home/ubuntu
 
             if [ ! -d "MERN_BACKEND" ]; then
               git clone https://github.com/deepakramaswamy2006/MERN_BACKEND.git
             fi
 
-            cd MERN_BACKEND || exit 1
+            cd MERN_BACKEND
             git pull origin main
 
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+            cd backend
+
+            echo "MONGODB_URI=${{ secrets.MONGO_URI }}" > .env
             echo "PORT=4000" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "NODE_ENV=production" >> .env
 
             npm install
+
             pm2 delete student-api || true
             pm2 start server.js --name student-api
             pm2 save
